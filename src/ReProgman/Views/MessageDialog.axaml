@@ -1,0 +1,21 @@
+<v:Win31DialogWindow xmlns="https://github.com/avaloniaui"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:v="using:ReProgman.Views"
+                     xmlns:w31="using:ReProgman.Win31"
+                     xmlns:app="using:ReProgman"
+                     x:Class="ReProgman.Views.MessageDialog"
+                     Title="Program Manager">
+  <w31:DialogShell x:Name="Shell" Title="Program Manager" Padding="16,14">
+    <StackPanel Spacing="14" MinWidth="240" MaxWidth="380">
+      <TextBlock x:Name="MessageText"
+                 HorizontalAlignment="Center"
+                 FontSize="{StaticResource Win31SystemFontSize}"
+                 FontWeight="Bold"
+                 TextWrapping="Wrap" />
+      <Button x:Name="OkButton"
+              HorizontalAlignment="Center"
+              Content="{x:Static app:Strings.ButtonOk}"
+              IsDefault="True" />
+    </StackPanel>
+  </w31:DialogShell>
+</v:Win31DialogWindow>

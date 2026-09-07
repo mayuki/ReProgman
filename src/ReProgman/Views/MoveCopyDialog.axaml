@@ -1,0 +1,44 @@
+<v:Win31DialogWindow xmlns="https://github.com/avaloniaui"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:sys="using:System"
+                     xmlns:v="using:ReProgman.Views"
+                     xmlns:w31="using:ReProgman.Win31"
+                     x:Class="ReProgman.Views.MoveCopyDialog"
+                     xmlns:app="using:ReProgman">
+  <w31:DialogShell x:Name="Shell" Padding="10,8,10,10">
+    <Grid ColumnDefinitions="*,Auto">
+      <StackPanel Grid.Column="0" Spacing="5" MinWidth="260">
+        <TextBlock x:Name="ItemText"
+                   FontSize="{StaticResource Win31SystemFontSize}"
+                   FontWeight="Bold" />
+        <TextBlock x:Name="FromText"
+                   FontSize="{StaticResource Win31SystemFontSize}"
+                   FontWeight="Bold" />
+        <AccessText x:Name="ToLabel"
+                    Margin="0,6,0,0"
+                    FontSize="{StaticResource Win31SystemFontSize}"
+                    FontWeight="Bold" />
+        <ListBox x:Name="GroupList"
+                 Width="260"
+                 Height="110"
+                 HorizontalAlignment="Left"
+                 BorderBrush="{StaticResource Win31Frame}"
+                 BorderThickness="1"
+                 ItemContainerTheme="{StaticResource Win31DialogListItem}">
+          <ListBox.ItemTemplate>
+            <DataTemplate DataType="sys:String">
+              <TextBlock FontSize="{StaticResource Win31SystemFontSize}"
+                         FontWeight="Bold"
+                         Text="{Binding}" />
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+      </StackPanel>
+      <StackPanel Grid.Column="1" Margin="14,0,0,0" Spacing="5">
+        <Button x:Name="OkButton" Content="{x:Static app:Strings.ButtonOk}" IsDefault="True" />
+        <Button x:Name="CancelButton" Content="{x:Static app:Strings.ButtonCancel}" />
+        <Button Content="{x:Static app:Strings.ButtonHelp}" IsEnabled="False" />
+      </StackPanel>
+    </Grid>
+  </w31:DialogShell>
+</v:Win31DialogWindow>

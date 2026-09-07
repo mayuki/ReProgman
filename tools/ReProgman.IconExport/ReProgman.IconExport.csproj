@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>ReProgman.IconExport</RootNamespace>
+    <!-- A developer tool that is never shipped: it only runs when the artwork
+         changes, so it stays a plain JIT console app. -->
+    <PublishAot>false</PublishAot>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- The artwork lives in the app, which draws the very same group icon on
+         screen. Referencing it keeps the icon files from ever drifting away from
+         what the windows show, and keeps the export code out of the shipped
+         executable. -->
+    <ProjectReference Include="..\..\src\ReProgman\ReProgman.csproj" />
+  </ItemGroup>
+
+</Project>

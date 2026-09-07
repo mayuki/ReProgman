@@ -1,0 +1,127 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:w31="using:ReProgman.Win31"
+        xmlns:app="using:ReProgman"
+        x:Class="ReProgman.Views.MainWindow"
+        Title="{x:Static app:Strings.AppTitle}"
+        Width="640"
+        Height="480"
+        MinWidth="240"
+        MinHeight="160"
+        SystemDecorations="None"
+        WindowStartupLocation="CenterScreen">
+
+  <Window.Styles>
+    <Style Selector="Grid#Caption">
+      <Setter Property="Background" Value="{StaticResource Win31ActiveTitle}" />
+    </Style>
+    <Style Selector="TextBlock#TitleText">
+      <Setter Property="Foreground" Value="{StaticResource Win31ActiveTitleText}" />
+    </Style>
+    <Style Selector=":is(Window).inactiveWin Grid#Caption">
+      <Setter Property="Background" Value="{StaticResource Win31InactiveTitle}" />
+    </Style>
+    <Style Selector=":is(Window).inactiveWin TextBlock#TitleText">
+      <Setter Property="Foreground" Value="{StaticResource Win31InactiveTitleText}" />
+    </Style>
+  </Window.Styles>
+
+  <w31:Win31Frame x:Name="Frame" BandThickness="2" NotchOffset="22">
+    <DockPanel>
+      <Grid x:Name="Caption" DockPanel.Dock="Top" Height="18">
+        <TextBlock x:Name="TitleText"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   FontSize="{StaticResource Win31SystemFontSize}"
+                   FontWeight="Bold"
+                   Text="{x:Static app:Strings.AppTitle}" />
+        <DockPanel>
+          <Border x:Name="SystemBox"
+                  DockPanel.Dock="Left"
+                  Width="19"
+                  Background="{StaticResource Win31Face}"
+                  BorderBrush="{StaticResource Win31Frame}"
+                  BorderThickness="0,0,1,0">
+            <w31:SystemBoxGlyph />
+          </Border>
+          <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+            <Border Width="1" Background="{StaticResource Win31Frame}" />
+            <Button x:Name="MinButton" Theme="{StaticResource Win31CaptionButton}" Width="18">
+              <w31:ArrowGlyph Kind="Down" Width="7" Height="14" />
+            </Button>
+            <Border Width="1" Background="{StaticResource Win31Frame}" />
+            <Button x:Name="MaxButton" Theme="{StaticResource Win31CaptionButton}" Width="18">
+              <w31:ArrowGlyph x:Name="MaxGlyph" Kind="Up" Width="7" Height="14" />
+            </Button>
+          </StackPanel>
+          <Panel />
+        </DockPanel>
+      </Grid>
+      <Border DockPanel.Dock="Top" Height="1" Background="{StaticResource Win31Frame}" />
+      <Border DockPanel.Dock="Top" Background="{StaticResource Win31Menu}">
+        <DockPanel Height="18">
+          <!-- While an MDI child is maximized its system box and restore button
+               live on the menu bar, Windows 3.1 style: full menu-bar height,
+               built like caption boxes with only a separator line on the
+               inner side (the menu bar's own black lines bound them above
+               and below). -->
+          <Border x:Name="MdiSystemBox"
+                  DockPanel.Dock="Left"
+                  Width="19"
+                  IsVisible="False"
+                  Background="{StaticResource Win31Face}"
+                  BorderBrush="{StaticResource Win31Frame}"
+                  BorderThickness="0,0,1,0">
+            <w31:SystemBoxGlyph BarWidth="7" />
+          </Border>
+          <Border x:Name="MdiRestoreBox"
+                  DockPanel.Dock="Right"
+                  IsVisible="False"
+                  BorderBrush="{StaticResource Win31Frame}"
+                  BorderThickness="1,0,0,0">
+            <!-- Raised like a caption button, and it depresses when pressed. -->
+            <Button x:Name="MdiRestoreButton"
+                    Width="18"
+                    Theme="{StaticResource Win31CaptionButton}">
+              <w31:ArrowGlyph Kind="UpDown" Width="7" Height="9" />
+            </Button>
+          </Border>
+          <Menu x:Name="MainMenu">
+          <MenuItem x:Name="MenuFileTop" Header="{x:Static app:Strings.MenuFile}">
+            <MenuItem x:Name="MenuNew" Header="{x:Static app:Strings.MenuNew}" Click="OnMenuNewClicked" />
+            <MenuItem x:Name="MenuOpen" Header="{x:Static app:Strings.MenuOpen}" w31:MenuProps.GestureText="Enter" Click="OnMenuOpenClicked" />
+            <MenuItem x:Name="MenuMove" Header="{x:Static app:Strings.MenuMove}" w31:MenuProps.GestureText="F7" Click="OnMenuMoveClicked" />
+            <MenuItem x:Name="MenuCopy" Header="{x:Static app:Strings.MenuCopy}" w31:MenuProps.GestureText="F8" Click="OnMenuCopyClicked" />
+            <MenuItem x:Name="MenuDelete" Header="{x:Static app:Strings.MenuDelete}" w31:MenuProps.GestureText="Del" Click="OnMenuDeleteClicked" />
+            <MenuItem x:Name="MenuProperties" Header="{x:Static app:Strings.MenuProperties}" w31:MenuProps.GestureText="Alt+Enter" Click="OnMenuPropertiesClicked" />
+            <Separator />
+            <MenuItem Header="{x:Static app:Strings.MenuRun}" Click="OnMenuRunClicked" />
+            <MenuItem Header="{x:Static app:Strings.MenuRefresh}" Click="OnMenuRefreshClicked" />
+            <Separator />
+            <MenuItem Header="{x:Static app:Strings.MenuExit}" Click="OnMenuExitClicked" />
+          </MenuItem>
+          <MenuItem Header="{x:Static app:Strings.MenuOptions}">
+            <MenuItem x:Name="MenuAutoArrange" Header="{x:Static app:Strings.MenuAutoArrange}" ToggleType="CheckBox" Click="OnOptionToggled" />
+            <MenuItem x:Name="MenuMinimizeOnUse" Header="{x:Static app:Strings.MenuMinimizeOnUse}" ToggleType="CheckBox" Click="OnOptionToggled" />
+            <MenuItem x:Name="MenuSaveSettings" Header="{x:Static app:Strings.MenuSaveSettings}" ToggleType="CheckBox" Click="OnOptionToggled" />
+          </MenuItem>
+          <MenuItem x:Name="MenuWindow" Header="{x:Static app:Strings.MenuWindow}" />
+          <MenuItem Header="{x:Static app:Strings.MenuHelp}">
+            <MenuItem Header="{x:Static app:Strings.MenuHelpContents}" IsEnabled="False" />
+            <MenuItem Header="{x:Static app:Strings.MenuHelpSearch}" IsEnabled="False" />
+            <Separator />
+            <MenuItem Header="{x:Static app:Strings.MenuHelpHowTo}" IsEnabled="False" />
+            <MenuItem Header="{x:Static app:Strings.MenuHelpTutorial}" IsEnabled="False" />
+            <Separator />
+            <MenuItem Header="{x:Static app:Strings.MenuHelpAbout}" Click="OnMenuAboutClicked" />
+          </MenuItem>
+          </Menu>
+        </DockPanel>
+      </Border>
+      <Border DockPanel.Dock="Top" Height="1" Background="{StaticResource Win31Frame}" />
+      <Panel Background="{StaticResource Win31AppWorkspace}">
+        <Canvas x:Name="MdiCanvas" ClipToBounds="True" Background="{StaticResource Win31AppWorkspace}" />
+      </Panel>
+    </DockPanel>
+  </w31:Win31Frame>
+</Window>

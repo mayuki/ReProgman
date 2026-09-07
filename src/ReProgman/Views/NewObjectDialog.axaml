@@ -1,0 +1,29 @@
+<v:Win31DialogWindow xmlns="https://github.com/avaloniaui"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:v="using:ReProgman.Views"
+                     xmlns:w31="using:ReProgman.Win31"
+                     xmlns:app="using:ReProgman"
+                     x:Class="ReProgman.Views.NewObjectDialog"
+                     Title="{x:Static app:Strings.NewTitle}">
+  <w31:DialogShell Title="{x:Static app:Strings.NewTitle}" Padding="12,10">
+    <Grid ColumnDefinitions="*,Auto">
+      <StackPanel Grid.Column="0" MinWidth="200" Spacing="8" VerticalAlignment="Center">
+        <TextBlock FontSize="{StaticResource Win31SystemFontSize}"
+                   FontWeight="Bold"
+                   Text="{x:Static app:Strings.NewChoiceLabel}" />
+        <RadioButton x:Name="GroupRadio"
+                     Margin="12,0,0,0"
+                     Content="{x:Static app:Strings.NewProgramGroup}"
+                     IsChecked="True" />
+        <RadioButton x:Name="ItemRadio"
+                     Margin="12,0,0,0"
+                     Content="{x:Static app:Strings.NewProgramItem}" />
+      </StackPanel>
+      <StackPanel Grid.Column="1" Margin="14,0,0,0" Spacing="5">
+        <Button x:Name="OkButton" Content="{x:Static app:Strings.ButtonOk}" IsDefault="True" />
+        <Button x:Name="CancelButton" Content="{x:Static app:Strings.ButtonCancel}" />
+        <Button Content="{x:Static app:Strings.ButtonHelp}" IsEnabled="False" />
+      </StackPanel>
+    </Grid>
+  </w31:DialogShell>
+</v:Win31DialogWindow>

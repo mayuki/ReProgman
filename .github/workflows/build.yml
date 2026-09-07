@@ -1,0 +1,121 @@
+name: Build
+
+# Manual only: the binaries are built on demand, collected from the run's
+# artifacts, and attached to a draft release. The release stays a draft, so
+# nothing becomes public and no tag is created until it is published by hand.
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag of the draft release (default: build-<run number>)'
+        required: false
+        type: string
+
+jobs:
+  windows:
+    name: Windows (${{ matrix.rid }})
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        rid: [win-x64, win-arm64]
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+
+      # NativeAOT (PublishAot in the project). arm64 cross-compiles from the x64
+      # runner, whose image carries the ARM64 MSVC tools; build/publish-aot.ps1 is
+      # not used because its vcvarsall workaround is only needed with the local
+      # Visual Studio 2026 install.
+      - name: Publish
+        run: dotnet publish src/ReProgman/ReProgman.csproj -c Release -r ${{ matrix.rid }} -o publish
+
+      # The NativeAOT symbols are far bigger than the executable itself.
+      - name: Drop the debug symbols
+        run: Remove-Item publish/*.pdb -Force -ErrorAction SilentlyContinue
+
+      # A release asset has to be a single file, so the publish folder is zipped
+      # here rather than uploaded as loose files.
+      - name: Zip the build
+        run: Compress-Archive -Path publish/* -DestinationPath ReProgman-${{ matrix.rid }}.zip
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: ReProgman-${{ matrix.rid }}
+          path: ReProgman-${{ matrix.rid }}.zip
+          if-no-files-found: error
+
+  macos:
+    name: macOS (osx-arm64)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+
+      # Publishes NativeAOT and assembles ReProgman.app: Info.plist, the native
+      # dylibs, and the committed ReProgman.icns copied in as the Dock icon.
+      - name: Build the app bundle
+        run: ./build/publish-macos.sh osx-arm64
+
+      # ditto keeps the executable bit and the bundle layout, which uploading the
+      # .app directory directly would lose.
+      - name: Zip the bundle
+        run: ditto -c -k --sequesterRsrc --keepParent artifacts/publish-macos/ReProgman.app ReProgman-osx-arm64.zip
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: ReProgman-osx-arm64
+          path: ReProgman-osx-arm64.zip
+          if-no-files-found: error
+
+  release:
+    name: Draft release
+    needs: [windows, macos]
+    runs-on: ubuntu-latest
+    permissions:
+      # gh release create writes to the repository.
+      contents: write
+    steps:
+      # gh resolves the repository from the checkout.
+      - uses: actions/checkout@v7
+
+      # merge-multiple puts the three zips side by side instead of in one
+      # directory per artifact.
+      - uses: actions/download-artifact@v8
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Create the draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          # Through the environment rather than inline, so the input cannot end
+          # up being interpreted as shell.
+          TAG_INPUT: ${{ inputs.tag }}
+          RUN_NUMBER: ${{ github.run_number }}
+          COMMIT: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          tag="${TAG_INPUT:-}"
+          if [ -z "$tag" ]; then
+            tag="build-$RUN_NUMBER"
+          fi
+
+          ls -l dist
+          # Re-running the workflow with the same tag refreshes the assets of the
+          # draft that is already there instead of failing.
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release upload "$tag" dist/*.zip --clobber
+          else
+            gh release create "$tag" dist/*.zip \
+              --draft \
+              --target "$COMMIT" \
+              --title "$tag" \
+              --notes "Built from $COMMIT by the Build workflow (run $RUN_NUMBER)."
+          fi

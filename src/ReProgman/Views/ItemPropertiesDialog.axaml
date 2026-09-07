@@ -1,0 +1,29 @@
+<v:Win31DialogWindow xmlns="https://github.com/avaloniaui"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:v="using:ReProgman.Views"
+                     xmlns:w31="using:ReProgman.Win31"
+                     xmlns:app="using:ReProgman"
+                     x:Class="ReProgman.Views.ItemPropertiesDialog"
+                     Title="{x:Static app:Strings.ItemPropsTitle}">
+  <w31:DialogShell Title="{x:Static app:Strings.ItemPropsTitle}" Padding="10,8,10,10">
+    <Grid ColumnDefinitions="*,Auto">
+      <StackPanel Grid.Column="0" Spacing="5" MinWidth="260">
+        <AccessText FontSize="{StaticResource Win31SystemFontSize}"
+                    FontWeight="Bold"
+                    Text="{x:Static app:Strings.LabelDescription}" />
+        <TextBox x:Name="NameBox" Width="260" HorizontalAlignment="Left" />
+        <AccessText Margin="0,4,0,0"
+                    FontSize="{StaticResource Win31SystemFontSize}"
+                    FontWeight="Bold"
+                    Text="{x:Static app:Strings.RunCommandLine}" />
+        <TextBox x:Name="PathBox" Width="260" HorizontalAlignment="Left" />
+      </StackPanel>
+      <StackPanel Grid.Column="1" Margin="14,0,0,0" Spacing="5">
+        <Button x:Name="OkButton" Content="{x:Static app:Strings.ButtonOk}" IsDefault="True" />
+        <Button x:Name="CancelButton" Content="{x:Static app:Strings.ButtonCancel}" />
+        <Button x:Name="BrowseButton" Content="{x:Static app:Strings.ButtonBrowse}" />
+        <Button Content="{x:Static app:Strings.ButtonHelp}" IsEnabled="False" />
+      </StackPanel>
+    </Grid>
+  </w31:DialogShell>
+</v:Win31DialogWindow>

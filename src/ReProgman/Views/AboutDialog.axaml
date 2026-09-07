@@ -1,0 +1,31 @@
+<v:Win31DialogWindow xmlns="https://github.com/avaloniaui"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:v="using:ReProgman.Views"
+                     xmlns:w31="using:ReProgman.Win31"
+                     xmlns:app="using:ReProgman"
+                     x:Class="ReProgman.Views.AboutDialog"
+                     Title="{x:Static app:Strings.AboutTitle}">
+  <w31:DialogShell Title="{x:Static app:Strings.AboutTitle}" Padding="14,12">
+    <StackPanel Spacing="4" MinWidth="280">
+      <StackPanel Orientation="Horizontal" Spacing="14">
+        <w31:GroupIconArt Width="32" Height="32" VerticalAlignment="Top" />
+        <StackPanel Spacing="3">
+          <TextBlock FontSize="{StaticResource Win31SystemFontSize}" FontWeight="Bold" Text="{x:Static app:Strings.AppTitle}" />
+          <TextBlock FontSize="{StaticResource Win31SystemFontSize}" FontWeight="Bold" Text="{x:Static app:Strings.AboutVersion}" />
+          <TextBlock Margin="0,8,0,0"
+                     FontFamily="{StaticResource Win31SmallFontFamily}"
+                     FontSize="{StaticResource Win31SmallFontSize}"
+                     Text="{x:Static app:Strings.AboutLine1}" />
+          <TextBlock FontFamily="{StaticResource Win31SmallFontFamily}"
+                     FontSize="{StaticResource Win31SmallFontSize}"
+                     Text="{x:Static app:Strings.AboutLine2}" />
+        </StackPanel>
+      </StackPanel>
+      <Button x:Name="OkButton"
+              Margin="0,14,0,0"
+              HorizontalAlignment="Center"
+              Content="{x:Static app:Strings.ButtonOk}"
+              IsDefault="True" />
+    </StackPanel>
+  </w31:DialogShell>
+</v:Win31DialogWindow>

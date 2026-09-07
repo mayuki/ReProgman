@@ -1,0 +1,25 @@
+<v:Win31DialogWindow xmlns="https://github.com/avaloniaui"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:v="using:ReProgman.Views"
+                     xmlns:w31="using:ReProgman.Win31"
+                     xmlns:app="using:ReProgman"
+                     x:Class="ReProgman.Views.ExitDialog"
+                     Title="{x:Static app:Strings.ExitTitle}">
+  <w31:DialogShell Title="{x:Static app:Strings.ExitTitle}" Padding="12,10,12,14">
+    <StackPanel MinWidth="300" Spacing="18">
+      <StackPanel Margin="8,6,8,0"
+                  Orientation="Horizontal"
+                  Spacing="18">
+        <w31:InfoIconArt Width="32" Height="32" VerticalAlignment="Center" />
+        <TextBlock VerticalAlignment="Center"
+                   FontSize="{StaticResource Win31SystemFontSize}"
+                   FontWeight="Bold"
+                   Text="{x:Static app:Strings.ExitMessage}" />
+      </StackPanel>
+      <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Spacing="28">
+        <Button x:Name="OkButton" MinWidth="76" Content="{x:Static app:Strings.ButtonOk}" IsDefault="True" />
+        <Button x:Name="CancelButton" MinWidth="76" Content="{x:Static app:Strings.ButtonCancel}" />
+      </StackPanel>
+    </StackPanel>
+  </w31:DialogShell>
+</v:Win31DialogWindow>

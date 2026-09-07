@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/ReProgman/ReProgman.csproj" />
+    <Project Path="src/ReProgman.Model/ReProgman.Model.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/ReProgman.Model.Tests/ReProgman.Model.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/ReProgman.IconExport/ReProgman.IconExport.csproj" />
+  </Folder>
+</Solution>

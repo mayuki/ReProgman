@@ -1,0 +1,108 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:w31="using:ReProgman.Win31"
+             xmlns:vm="using:ReProgman.ViewModels"
+             xmlns:ctl="using:ReProgman.Controls"
+             x:Class="ReProgman.Controls.GroupWindow"
+             x:DataType="vm:GroupViewModel">
+
+  <UserControl.Styles>
+    <Style Selector="Grid#Caption">
+      <Setter Property="Background" Value="{StaticResource Win31InactiveTitle}" />
+    </Style>
+    <Style Selector="TextBlock#TitleText">
+      <Setter Property="Foreground" Value="{StaticResource Win31InactiveTitleText}" />
+    </Style>
+    <Style Selector=":is(UserControl).active Grid#Caption">
+      <Setter Property="Background" Value="{StaticResource Win31ActiveTitle}" />
+    </Style>
+    <Style Selector=":is(UserControl).active TextBlock#TitleText">
+      <Setter Property="Foreground" Value="{StaticResource Win31ActiveTitleText}" />
+    </Style>
+
+    <!-- The active child's caption goes inactive with the frame window, like the
+         original MDI. The selection inside the group keeps its highlight. -->
+    <Style Selector=":is(UserControl).active.frameInactive Grid#Caption">
+      <Setter Property="Background" Value="{StaticResource Win31InactiveTitle}" />
+    </Style>
+    <Style Selector=":is(UserControl).active.frameInactive TextBlock#TitleText">
+      <Setter Property="Foreground" Value="{StaticResource Win31InactiveTitleText}" />
+    </Style>
+
+    <!-- Only the label of the selected item is highlighted, and only while the
+         group window is the active one, exactly like the original. -->
+    <Style Selector=":is(UserControl).active ListBox ListBoxItem:selected Border.iconLabel">
+      <Setter Property="Background" Value="{StaticResource Win31Selection}" />
+    </Style>
+    <Style Selector=":is(UserControl).active ListBox ListBoxItem:selected TextBlock.iconLabelText">
+      <Setter Property="Foreground" Value="{StaticResource Win31SelectionText}" />
+    </Style>
+  </UserControl.Styles>
+
+  <w31:Win31Frame x:Name="Frame" BandThickness="2" NotchOffset="22">
+    <DockPanel>
+      <Grid x:Name="Caption" DockPanel.Dock="Top" Height="18">
+        <TextBlock x:Name="TitleText"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   FontSize="{StaticResource Win31SystemFontSize}"
+                   FontWeight="Bold"
+                   Text="{Binding Name}" />
+        <DockPanel>
+          <Border x:Name="SystemBox"
+                  DockPanel.Dock="Left"
+                  Width="19"
+                  Background="{StaticResource Win31Face}"
+                  BorderBrush="{StaticResource Win31Frame}"
+                  BorderThickness="0,0,1,0">
+            <!-- MDI children carry a shorter bar than top-level windows. -->
+            <w31:SystemBoxGlyph BarWidth="7" />
+          </Border>
+          <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+            <Border Width="1" Background="{StaticResource Win31Frame}" />
+            <Button x:Name="MinButton" Theme="{StaticResource Win31CaptionButton}" Width="18">
+              <w31:ArrowGlyph Kind="Down" Width="7" Height="14" />
+            </Button>
+            <Border Width="1" Background="{StaticResource Win31Frame}" />
+            <Button x:Name="MaxButton" Theme="{StaticResource Win31CaptionButton}" Width="18">
+              <w31:ArrowGlyph x:Name="MaxGlyph" Kind="Up" Width="7" Height="14" />
+            </Button>
+          </StackPanel>
+          <Panel />
+        </DockPanel>
+      </Grid>
+      <Border x:Name="CaptionLine" DockPanel.Dock="Top" Height="1" Background="{StaticResource Win31Frame}" />
+      <ListBox x:Name="ItemsList"
+               ItemsSource="{Binding Items}"
+               SelectionMode="Single"
+               ScrollViewer.HorizontalScrollBarVisibility="Auto"
+               Padding="2">
+        <ListBox.ItemsPanel>
+          <ItemsPanelTemplate>
+            <ctl:IconCanvas />
+          </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+        <ListBox.ItemTemplate>
+          <DataTemplate x:DataType="vm:ItemViewModel">
+            <StackPanel Background="Transparent" Spacing="2" Width="74">
+              <Panel Width="32" Height="32" Margin="0,2,0,0" HorizontalAlignment="Center">
+                <w31:GroupIconArt Width="32" Height="32" IsVisible="{Binding !HasIcon}" />
+                <Image Width="32" Height="32" Source="{Binding Icon}" IsVisible="{Binding HasIcon}" />
+              </Panel>
+              <Border Classes="iconLabel" HorizontalAlignment="Center" Padding="1,0">
+                <TextBlock Classes="iconLabelText"
+                           FontFamily="{StaticResource Win31SmallFontFamily}"
+                           FontSize="{StaticResource Win31SmallFontSize}"
+                           MaxWidth="70"
+                           MaxLines="2"
+                           Text="{Binding Name}"
+                           TextAlignment="Center"
+                           TextWrapping="Wrap" />
+              </Border>
+            </StackPanel>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+    </DockPanel>
+  </w31:Win31Frame>
+</UserControl>

@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Plain net10.0 so the same project builds on Windows and macOS. Windows-only
+         P/Invokes are guarded with OperatingSystem.IsWindows() instead. -->
+    <!-- The project name is the assembly and root namespace name, so neither is
+         set here any more. -->
+    <TargetFramework>net10.0</TargetFramework>
+    <OutputType>WinExe</OutputType>
+    <!-- NativeAOT: publish with `dotnet publish -c Release -r win-x64` (or osx-arm64).
+         Normal build/run and F5 debugging stay JIT-based. -->
+    <PublishAot>true</PublishAot>
+    <!-- Compiled bindings avoid reflection at runtime, which NativeAOT requires. -->
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+  </PropertyGroup>
+
+  <!-- The manifest only carries Windows settings (DPI awareness, execution level).
+       ReProgman.ico is the icon the app draws for itself; regenerate it with
+       build/export-icons.ps1 after changing the artwork. It has to exist before
+       the build that would produce it, so the file is committed. -->
+  <PropertyGroup Condition="'$(OS)' == 'Windows_NT' or $([System.String]::Copy('$(RuntimeIdentifier)').StartsWith('win'))">
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>ReProgman.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.3.20" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.3.20" />
+    <PackageReference Include="Avalonia.Themes.Simple" Version="11.3.20" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.3.20" Condition="'$(Configuration)' == 'Debug'" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ReProgman.Model\ReProgman.Model.csproj" />
+  </ItemGroup>
+
+</Project>

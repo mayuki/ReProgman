@@ -1,0 +1,24 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!-- The bold system font used for menus, captions, buttons, and dialogs.
+       Avalonia cannot use GDI raster fonts (.FON), so the Windows 3.1 "System"
+       bitmap font is approximated with a Helvetica-flavored family that ships
+       a REAL bold face: Microsoft Sans Serif only has a Regular face, and its
+       synthesized bold smudges. The list is walked until a family exists, so
+       Windows lands on Arial and macOS on Arial/Helvetica. "MS Gothic" /
+       "Hiragino Kaku Gothic ProN" fill in Japanese glyphs, matching the
+       Windows 3.1J system font. -->
+  <Style Selector=":is(Window)">
+    <Setter Property="FontFamily" Value="Arial, Helvetica, MS Gothic, Hiragino Kaku Gothic ProN, Yu Gothic UI" />
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="Foreground" Value="Black" />
+  </Style>
+
+  <!-- Windows 3.1 always shows menu accelerator underlines, not only while
+       the Alt key is held down. -->
+  <Style Selector="AccessText">
+    <Setter Property="ShowAccessKey" Value="True" />
+  </Style>
+
+</Styles>

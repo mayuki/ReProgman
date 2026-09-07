@@ -1,0 +1,693 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="using:System"
+                    xmlns:w31="using:ReProgman.Win31">
+
+  <!-- Windows 3.1 "Windows Default" scheme -->
+  <SolidColorBrush x:Key="Win31Face" Color="#C0C0C0" />
+  <SolidColorBrush x:Key="Win31Shadow" Color="#808080" />
+  <SolidColorBrush x:Key="Win31Highlight" Color="#FFFFFF" />
+  <SolidColorBrush x:Key="Win31Frame" Color="#000000" />
+  <SolidColorBrush x:Key="Win31ActiveTitle" Color="#0000B8" />
+  <SolidColorBrush x:Key="Win31ActiveTitleText" Color="#FFFFFF" />
+  <SolidColorBrush x:Key="Win31InactiveTitle" Color="#FFFFFF" />
+  <SolidColorBrush x:Key="Win31InactiveTitleText" Color="#000000" />
+  <SolidColorBrush x:Key="Win31Menu" Color="#FFFFFF" />
+  <SolidColorBrush x:Key="Win31MenuText" Color="#000000" />
+  <SolidColorBrush x:Key="Win31Selection" Color="#0000B8" />
+  <SolidColorBrush x:Key="Win31SelectionText" Color="#FFFFFF" />
+  <SolidColorBrush x:Key="Win31Window" Color="#FFFFFF" />
+  <SolidColorBrush x:Key="Win31WindowText" Color="#000000" />
+  <SolidColorBrush x:Key="Win31AppWorkspace" Color="#FFFFFF" />
+  <SolidColorBrush x:Key="Win31GrayText" Color="#808080" />
+
+  <!-- Icon labels use the MS Sans Serif successor at its regular weight;
+       macOS walks the list to Helvetica / Hiragino. -->
+  <FontFamily x:Key="Win31SmallFontFamily">Microsoft Sans Serif, Helvetica, MS Gothic, Hiragino Kaku Gothic ProN, Yu Gothic UI</FontFamily>
+  <x:Double x:Key="Win31SystemFontSize">14</x:Double>
+  <x:Double x:Key="Win31SmallFontSize">11</x:Double>
+  <x:Double x:Key="Win31CaptionHeight">18</x:Double>
+  <x:Double x:Key="Win31MenuBarHeight">18</x:Double>
+
+  <!-- ============================== Button ============================== -->
+  <ControlTheme x:Key="{x:Type Button}" TargetType="Button">
+    <Setter Property="Background" Value="{StaticResource Win31Face}" />
+    <Setter Property="Foreground" Value="{StaticResource Win31WindowText}" />
+    <Setter Property="FontSize" Value="{StaticResource Win31SystemFontSize}" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Padding" Value="12,2" />
+    <Setter Property="MinWidth" Value="68" />
+    <Setter Property="MinHeight" Value="24" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Name="defaultRing"
+                Background="Transparent"
+                BorderBrush="Transparent"
+                BorderThickness="1"
+                CornerRadius="3">
+          <Border Name="blackBorder"
+                  Background="{TemplateBinding Background}"
+                  BorderBrush="{StaticResource Win31Frame}"
+                  BorderThickness="1"
+                  CornerRadius="2">
+            <w31:Bevel Name="bevel" Depth="2" Mode="Raised">
+              <!-- The presenter shrinks to its content and is centered as a whole:
+                   a stretched presenter would leave the label itself left-aligned. -->
+              <ContentPresenter Name="PART_ContentPresenter"
+                                Margin="{TemplateBinding Padding}"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                RecognizesAccessKey="True" />
+            </w31:Bevel>
+          </Border>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^[IsDefault=True] /template/ Border#defaultRing">
+      <Setter Property="BorderBrush" Value="{StaticResource Win31Frame}" />
+    </Style>
+    <Style Selector="^:pressed /template/ w31|Bevel#bevel">
+      <Setter Property="Mode" Value="Pressed" />
+    </Style>
+    <Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="RenderTransform" Value="translate(1px, 1px)" />
+    </Style>
+    <Style Selector="^:disabled">
+      <Setter Property="Foreground" Value="{StaticResource Win31GrayText}" />
+    </Style>
+  </ControlTheme>
+
+  <!-- Caption buttons (minimize / maximize): gray boxes with black arrows -->
+  <ControlTheme x:Key="Win31CaptionButton" TargetType="Button">
+    <Setter Property="Background" Value="{StaticResource Win31Face}" />
+    <Setter Property="MinWidth" Value="0" />
+    <Setter Property="MinHeight" Value="0" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="Focusable" Value="False" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{TemplateBinding Background}">
+          <!-- Measured shading: 1px highlight, 2px shadow. -->
+          <w31:Bevel Name="bevel" Depth="2" HighlightDepth="1" Mode="Raised">
+            <ContentPresenter Name="PART_ContentPresenter"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"
+                              Content="{TemplateBinding Content}" />
+          </w31:Bevel>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:pressed /template/ w31|Bevel#bevel">
+      <Setter Property="Mode" Value="Pressed" />
+    </Style>
+  </ControlTheme>
+
+  <!-- ============================ RepeatButton =========================== -->
+  <ControlTheme x:Key="{x:Type RepeatButton}" TargetType="RepeatButton">
+    <Setter Property="Background" Value="{StaticResource Win31Face}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Name="blackBorder"
+                Background="{TemplateBinding Background}"
+                BorderBrush="{StaticResource Win31Frame}"
+                BorderThickness="1">
+          <w31:Bevel Name="bevel" Depth="2" HighlightDepth="1" Mode="Raised">
+            <ContentPresenter Name="PART_ContentPresenter"
+                              HorizontalContentAlignment="Center"
+                              VerticalContentAlignment="Center"
+                              Content="{TemplateBinding Content}" />
+          </w31:Bevel>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:pressed /template/ w31|Bevel#bevel">
+      <Setter Property="Mode" Value="Pressed" />
+    </Style>
+  </ControlTheme>
+
+  <ControlTheme x:Key="Win31ScrollPageButton" TargetType="RepeatButton">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="Transparent" />
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <!-- ============================= ScrollBar ============================= -->
+  <ControlTheme x:Key="{x:Type ScrollBar}" TargetType="ScrollBar">
+    <Setter Property="Cursor" Value="Arrow" />
+    <Style Selector="^:vertical">
+      <Setter Property="Width" Value="16" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Border Background="{StaticResource Win31Face}">
+            <Grid RowDefinitions="Auto,*,Auto">
+              <RepeatButton Name="PART_LineUpButton"
+                            Grid.Row="0"
+                            Height="16"
+                            Focusable="False">
+                <w31:ArrowGlyph Kind="Up" Shaft="True" Width="7" Height="7" />
+              </RepeatButton>
+              <Track Grid.Row="1"
+                     IsDirectionReversed="True"
+                     Maximum="{TemplateBinding Maximum}"
+                     Minimum="{TemplateBinding Minimum}"
+                     Orientation="{TemplateBinding Orientation}"
+                     Value="{TemplateBinding Value, Mode=TwoWay}">
+                <Track.DecreaseButton>
+                  <RepeatButton Name="PART_PageUpButton"
+                                Theme="{StaticResource Win31ScrollPageButton}"
+                                Focusable="False" />
+                </Track.DecreaseButton>
+                <Track.IncreaseButton>
+                  <RepeatButton Name="PART_PageDownButton"
+                                Theme="{StaticResource Win31ScrollPageButton}"
+                                Focusable="False" />
+                </Track.IncreaseButton>
+                <Thumb Name="thumb" Height="16" />
+              </Track>
+              <RepeatButton Name="PART_LineDownButton"
+                            Grid.Row="2"
+                            Height="16"
+                            Focusable="False">
+                <w31:ArrowGlyph Kind="Down" Shaft="True" Width="7" Height="7" />
+              </RepeatButton>
+            </Grid>
+          </Border>
+        </ControlTemplate>
+      </Setter>
+    </Style>
+    <Style Selector="^:horizontal">
+      <Setter Property="Height" Value="16" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Border Background="{StaticResource Win31Face}">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+              <RepeatButton Name="PART_LineUpButton"
+                            Grid.Column="0"
+                            Width="16"
+                            Focusable="False">
+                <w31:ArrowGlyph Kind="Left" Shaft="True" Width="7" Height="7" />
+              </RepeatButton>
+              <Track Grid.Column="1"
+                     Maximum="{TemplateBinding Maximum}"
+                     Minimum="{TemplateBinding Minimum}"
+                     Orientation="{TemplateBinding Orientation}"
+                     Value="{TemplateBinding Value, Mode=TwoWay}">
+                <Track.DecreaseButton>
+                  <RepeatButton Name="PART_PageUpButton"
+                                Theme="{StaticResource Win31ScrollPageButton}"
+                                Focusable="False" />
+                </Track.DecreaseButton>
+                <Track.IncreaseButton>
+                  <RepeatButton Name="PART_PageDownButton"
+                                Theme="{StaticResource Win31ScrollPageButton}"
+                                Focusable="False" />
+                </Track.IncreaseButton>
+                <Thumb Name="thumb" Width="16" />
+              </Track>
+              <RepeatButton Name="PART_LineDownButton"
+                            Grid.Column="2"
+                            Width="16"
+                            Focusable="False">
+                <w31:ArrowGlyph Kind="Right" Shaft="True" Width="7" Height="7" />
+              </RepeatButton>
+            </Grid>
+          </Border>
+        </ControlTemplate>
+      </Setter>
+    </Style>
+    <Style Selector="^ /template/ Thumb#thumb">
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Border Background="{StaticResource Win31Face}"
+                  BorderBrush="{StaticResource Win31Frame}"
+                  BorderThickness="1">
+            <w31:Bevel Depth="2" HighlightDepth="1" Mode="Raised" />
+          </Border>
+        </ControlTemplate>
+      </Setter>
+    </Style>
+  </ControlTheme>
+
+  <!-- ============================ ScrollViewer =========================== -->
+  <ControlTheme x:Key="{x:Type ScrollViewer}" TargetType="ScrollViewer">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Grid ColumnDefinitions="*,Auto" RowDefinitions="*,Auto">
+          <ScrollContentPresenter Name="PART_ContentPresenter"
+                                  Padding="{TemplateBinding Padding}"
+                                  Background="{TemplateBinding Background}">
+            <ScrollContentPresenter.GestureRecognizers>
+              <ScrollGestureRecognizer CanHorizontallyScroll="{Binding CanHorizontallyScroll, ElementName=PART_ContentPresenter}"
+                                       CanVerticallyScroll="{Binding CanVerticallyScroll, ElementName=PART_ContentPresenter}" />
+            </ScrollContentPresenter.GestureRecognizers>
+          </ScrollContentPresenter>
+          <ScrollBar Name="PART_HorizontalScrollBar"
+                     Grid.Row="1"
+                     Orientation="Horizontal" />
+          <ScrollBar Name="PART_VerticalScrollBar"
+                     Grid.Column="1"
+                     Orientation="Vertical" />
+          <Panel Grid.Row="1"
+                 Grid.Column="1"
+                 Background="{StaticResource Win31Face}" />
+        </Grid>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <!-- =============================== Menus =============================== -->
+  <ControlTheme x:Key="Win31TopLevelMenuItem" TargetType="MenuItem">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{StaticResource Win31MenuText}" />
+    <Setter Property="FontSize" Value="{StaticResource Win31SystemFontSize}" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Padding" Value="7,0" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Name="root" Background="{TemplateBinding Background}">
+          <Panel>
+            <ContentPresenter Name="PART_HeaderPresenter"
+                              Margin="{TemplateBinding Padding}"
+                              VerticalAlignment="Center"
+                              Content="{TemplateBinding Header}"
+                              ContentTemplate="{TemplateBinding HeaderTemplate}">
+              <ContentPresenter.DataTemplates>
+                <DataTemplate DataType="sys:String">
+                  <AccessText Text="{Binding}" />
+                </DataTemplate>
+              </ContentPresenter.DataTemplates>
+            </ContentPresenter>
+            <Popup Name="PART_Popup"
+                   IsLightDismissEnabled="True"
+                   IsOpen="{TemplateBinding IsSubMenuOpen, Mode=TwoWay}"
+                   Placement="BottomEdgeAlignedLeft"
+                   VerticalOffset="2"
+                   WindowManagerAddShadowHint="False"
+                   OverlayInputPassThroughElement="{Binding $parent[Menu]}">
+              <!-- A popup is its own top level, so the window's render options
+                   do not reach it: the aliased look has to be set on the popup
+                   content itself or the menu text comes out antialiased. -->
+              <Border Background="{StaticResource Win31Menu}"
+                      BorderBrush="{StaticResource Win31Frame}"
+                      BorderThickness="1"
+                      RenderOptions.TextRenderingMode="Alias"
+                      RenderOptions.EdgeMode="Aliased">
+                <ItemsPresenter Name="PART_ItemsPresenter"
+                                Margin="0,1"
+                                Grid.IsSharedSizeScope="True"
+                                ItemsPanel="{TemplateBinding ItemsPanel}" />
+              </Border>
+            </Popup>
+          </Panel>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^:selected /template/ Border#root">
+      <Setter Property="Background" Value="{StaticResource Win31Selection}" />
+    </Style>
+    <Style Selector="^:selected">
+      <Setter Property="Foreground" Value="{StaticResource Win31SelectionText}" />
+    </Style>
+    <Style Selector="^:disabled">
+      <Setter Property="Foreground" Value="{StaticResource Win31GrayText}" />
+    </Style>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type Menu}" TargetType="Menu">
+    <Setter Property="Background" Value="{StaticResource Win31Menu}" />
+    <Setter Property="ItemContainerTheme" Value="{StaticResource Win31TopLevelMenuItem}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Padding="{TemplateBinding Padding}"
+                Background="{TemplateBinding Background}">
+          <ItemsPresenter Name="PART_ItemsPresenter"
+                          ItemsPanel="{TemplateBinding ItemsPanel}"
+                          KeyboardNavigation.TabNavigation="Continue" />
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type MenuItem}" TargetType="MenuItem">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{StaticResource Win31MenuText}" />
+    <Setter Property="FontSize" Value="{StaticResource Win31SystemFontSize}" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel>
+          <Border Name="root"
+                  Background="{TemplateBinding Background}"
+                  MinHeight="17">
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="13" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="MenuItemIGT" />
+                <ColumnDefinition Width="12" />
+              </Grid.ColumnDefinitions>
+              <Path Name="check"
+                    Grid.Column="0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Data="M 0,4 L 1,4 4,7 9,0 10,0 10,1 5,9 4,9 0,5 Z"
+                    Fill="{TemplateBinding Foreground}"
+                    IsVisible="False" />
+              <ContentPresenter Name="PART_HeaderPresenter"
+                                Grid.Column="1"
+                                Margin="0,1,8,2"
+                                VerticalAlignment="Center"
+                                Content="{TemplateBinding Header}"
+                                ContentTemplate="{TemplateBinding HeaderTemplate}">
+                <ContentPresenter.DataTemplates>
+                  <DataTemplate DataType="sys:String">
+                    <AccessText Text="{Binding}" />
+                  </DataTemplate>
+                </ContentPresenter.DataTemplates>
+              </ContentPresenter>
+              <TextBlock Name="PART_InputGestureText"
+                         Grid.Column="2"
+                         Margin="16,1,2,2"
+                         VerticalAlignment="Center"
+                         Text="{TemplateBinding (w31:MenuProps.GestureText)}" />
+              <w31:ArrowGlyph Name="rightArrow"
+                              Grid.Column="3"
+                              Width="5"
+                              Height="9"
+                              Kind="Right"
+                              Fill="{TemplateBinding Foreground}"
+                              IsVisible="False" />
+              <Popup Name="PART_Popup"
+                     Grid.Column="0"
+                     IsLightDismissEnabled="False"
+                     IsOpen="{TemplateBinding IsSubMenuOpen, Mode=TwoWay}"
+                     Placement="RightEdgeAlignedTop"
+                     WindowManagerAddShadowHint="False">
+                <!-- Submenus open in their own popup top level too. -->
+                <Border Background="{StaticResource Win31Menu}"
+                        BorderBrush="{StaticResource Win31Frame}"
+                        BorderThickness="1"
+                        RenderOptions.TextRenderingMode="Alias"
+                        RenderOptions.EdgeMode="Aliased">
+                  <ItemsPresenter Name="PART_ItemsPresenter"
+                                  Margin="0,1"
+                                  Grid.IsSharedSizeScope="True"
+                                  ItemsPanel="{TemplateBinding ItemsPanel}" />
+                </Border>
+              </Popup>
+            </Grid>
+          </Border>
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^:separator">
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Separator />
+        </ControlTemplate>
+      </Setter>
+    </Style>
+    <Style Selector="^:selected /template/ Border#root">
+      <Setter Property="Background" Value="{StaticResource Win31Selection}" />
+    </Style>
+    <Style Selector="^:selected">
+      <Setter Property="Foreground" Value="{StaticResource Win31SelectionText}" />
+    </Style>
+    <Style Selector="^:disabled">
+      <Setter Property="Foreground" Value="{StaticResource Win31GrayText}" />
+    </Style>
+    <Style Selector="^:checked /template/ Path#check">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+    <Style Selector="^:not(:empty) /template/ w31|ArrowGlyph#rightArrow">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type MenuFlyoutPresenter}" TargetType="MenuFlyoutPresenter">
+    <Setter Property="Background" Value="{StaticResource Win31Menu}" />
+    <Setter Property="BorderBrush" Value="{StaticResource Win31Frame}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="Padding" Value="0,1" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <!-- The system menu flyouts are popups as well. -->
+        <Border Name="LayoutRoot"
+                Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                RenderOptions.TextRenderingMode="Alias"
+                RenderOptions.EdgeMode="Aliased">
+          <ItemsPresenter Name="PART_ItemsPresenter"
+                          Margin="{TemplateBinding Padding}"
+                          Grid.IsSharedSizeScope="True"
+                          ItemsPanel="{TemplateBinding ItemsPanel}"
+                          KeyboardNavigation.TabNavigation="Continue" />
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type Separator}" TargetType="Separator">
+    <Setter Property="Focusable" Value="False" />
+    <Setter Property="Background" Value="{StaticResource Win31Frame}" />
+    <Setter Property="Margin" Value="0,3" />
+    <Setter Property="Height" Value="1" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{TemplateBinding Background}" />
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <!-- ============================== TextBox ============================== -->
+  <ControlTheme x:Key="{x:Type TextBox}" TargetType="TextBox">
+    <Setter Property="Background" Value="{StaticResource Win31Window}" />
+    <Setter Property="Foreground" Value="{StaticResource Win31WindowText}" />
+    <Setter Property="CaretBrush" Value="{StaticResource Win31WindowText}" />
+    <Setter Property="SelectionBrush" Value="{StaticResource Win31Selection}" />
+    <Setter Property="SelectionForegroundBrush" Value="{StaticResource Win31SelectionText}" />
+    <Setter Property="BorderBrush" Value="{StaticResource Win31Frame}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="FontSize" Value="{StaticResource Win31SystemFontSize}" />
+    <Setter Property="MinHeight" Value="22" />
+    <Setter Property="Padding" Value="4,2" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Name="border"
+                Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}">
+          <ScrollViewer Name="PART_ScrollViewer"
+                        Margin="{TemplateBinding Padding}"
+                        HorizontalScrollBarVisibility="Hidden"
+                        VerticalScrollBarVisibility="Disabled">
+            <TextPresenter Name="PART_TextPresenter"
+                           VerticalAlignment="Center"
+                           CaretBlinkInterval="{TemplateBinding CaretBlinkInterval}"
+                           CaretBrush="{TemplateBinding CaretBrush}"
+                           CaretIndex="{TemplateBinding CaretIndex}"
+                           PasswordChar="{TemplateBinding PasswordChar}"
+                           RevealPassword="{TemplateBinding RevealPassword}"
+                           SelectionBrush="{TemplateBinding SelectionBrush}"
+                           SelectionEnd="{TemplateBinding SelectionEnd}"
+                           SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
+                           SelectionStart="{TemplateBinding SelectionStart}"
+                           Text="{TemplateBinding Text, Mode=TwoWay}"
+                           TextAlignment="{TemplateBinding TextAlignment}"
+                           TextWrapping="{TemplateBinding TextWrapping}" />
+          </ScrollViewer>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <!-- ============================== CheckBox ============================= -->
+  <ControlTheme x:Key="{x:Type CheckBox}" TargetType="CheckBox">
+    <Setter Property="Foreground" Value="{StaticResource Win31WindowText}" />
+    <Setter Property="FontSize" Value="{StaticResource Win31SystemFontSize}" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Grid ColumnDefinitions="Auto,*" Background="Transparent">
+          <Border Grid.Column="0"
+                  Width="13"
+                  Height="13"
+                  VerticalAlignment="Center"
+                  Background="{StaticResource Win31Window}"
+                  BorderBrush="{StaticResource Win31Frame}"
+                  BorderThickness="1">
+            <!-- Windows 3.1 marks checked boxes with an X, not a check mark. -->
+            <Path Name="checkMark"
+                  Data="M 0,0 L 9,9 M 9,0 L 0,9"
+                  Stroke="{StaticResource Win31WindowText}"
+                  StrokeThickness="1"
+                  Margin="1"
+                  IsVisible="False" />
+          </Border>
+          <ContentPresenter Name="PART_ContentPresenter"
+                            Grid.Column="1"
+                            Margin="7,0,0,0"
+                            VerticalAlignment="Center"
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            RecognizesAccessKey="True" />
+        </Grid>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:checked /template/ Path#checkMark">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+  </ControlTheme>
+
+  <!-- ============================= RadioButton =========================== -->
+  <ControlTheme x:Key="{x:Type RadioButton}" TargetType="RadioButton">
+    <Setter Property="Foreground" Value="{StaticResource Win31WindowText}" />
+    <Setter Property="FontSize" Value="{StaticResource Win31SystemFontSize}" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Grid ColumnDefinitions="Auto,*" Background="Transparent">
+          <Ellipse Grid.Column="0"
+                   Width="13"
+                   Height="13"
+                   VerticalAlignment="Center"
+                   Fill="{StaticResource Win31Window}"
+                   Stroke="{StaticResource Win31Frame}"
+                   StrokeThickness="1" />
+          <Ellipse Name="dot"
+                   Grid.Column="0"
+                   Width="5"
+                   Height="5"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Fill="{StaticResource Win31WindowText}"
+                   IsVisible="False" />
+          <ContentPresenter Name="PART_ContentPresenter"
+                            Grid.Column="1"
+                            Margin="7,0,0,0"
+                            VerticalAlignment="Center"
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            RecognizesAccessKey="True" />
+        </Grid>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:checked /template/ Ellipse#dot">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+  </ControlTheme>
+
+  <!-- List box items inside dialogs: full navy selection bar, unlike the
+       label-only highlight used for program icons. -->
+  <ControlTheme x:Key="Win31DialogListItem"
+                BasedOn="{StaticResource {x:Type ListBoxItem}}"
+                TargetType="ListBoxItem">
+    <Setter Property="Padding" Value="4,1" />
+    <Style Selector="^:selected">
+      <Setter Property="Background" Value="{StaticResource Win31Selection}" />
+      <Setter Property="Foreground" Value="{StaticResource Win31SelectionText}" />
+    </Style>
+  </ControlTheme>
+
+  <!-- ============================== ListBox ============================== -->
+  <ControlTheme x:Key="{x:Type ListBox}" TargetType="ListBox">
+    <!-- The stock themes make a ListBox focusable through their own setter, so a
+         hand-written theme has to say it again; without it the icon list cannot
+         take the keyboard focus and the arrow keys go nowhere. -->
+    <Setter Property="Focusable" Value="True" />
+    <Setter Property="Background" Value="{StaticResource Win31Window}" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+    <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Name="border"
+                Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}">
+          <ScrollViewer Name="PART_ScrollViewer"
+                        HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
+                        VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}">
+            <ItemsPresenter Name="PART_ItemsPresenter"
+                            Margin="{TemplateBinding Padding}"
+                            ItemsPanel="{TemplateBinding ItemsPanel}" />
+          </ScrollViewer>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type ListBoxItem}" TargetType="ListBoxItem">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <ContentPresenter Name="PART_ContentPresenter"
+                          Padding="{TemplateBinding Padding}"
+                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                          Background="{TemplateBinding Background}"
+                          Content="{TemplateBinding Content}"
+                          ContentTemplate="{TemplateBinding ContentTemplate}" />
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <!-- ============================ DialogShell ============================ -->
+  <ControlTheme x:Key="{x:Type w31:DialogShell}" TargetType="w31:DialogShell">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <!-- Measured modal frame: black outline, 4px band in the active title
+             color, then a 1px white inner line; the interior is white. -->
+        <w31:Win31Frame BandThickness="4"
+                        ShowNotches="False"
+                        BandBrush="{StaticResource Win31ActiveTitle}"
+                        InnerBrush="{StaticResource Win31Highlight}">
+          <DockPanel Background="{StaticResource Win31Window}">
+            <Grid Name="PART_Caption"
+                  DockPanel.Dock="Top"
+                  Height="18"
+                  Background="{StaticResource Win31ActiveTitle}"
+                  ColumnDefinitions="Auto,*">
+              <Border Name="PART_SystemBox"
+                      Grid.Column="0"
+                      Width="19"
+                      Background="{StaticResource Win31Face}"
+                      BorderBrush="{StaticResource Win31Frame}"
+                      BorderThickness="0,0,1,0">
+                <w31:SystemBoxGlyph />
+              </Border>
+              <TextBlock Grid.Column="1"
+                         Margin="-19,0,0,0"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"
+                         FontSize="{StaticResource Win31SystemFontSize}"
+                         FontWeight="Bold"
+                         Foreground="{StaticResource Win31ActiveTitleText}"
+                         Text="{TemplateBinding Title}" />
+            </Grid>
+            <Border DockPanel.Dock="Top"
+                    Height="1"
+                    Background="{StaticResource Win31Frame}" />
+            <ContentPresenter Name="PART_ContentPresenter"
+                              Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                              Margin="{TemplateBinding Padding}" />
+          </DockPanel>
+        </w31:Win31Frame>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+</ResourceDictionary>
